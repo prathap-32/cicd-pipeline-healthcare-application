@@ -1,69 +1,179 @@
+# End-to-End CI/CD Pipeline using Jenkins, Docker, and Kubernetes
 
-# Docker Based Monolithic Application
-### Digital Health Record Management System for Migrant Workers
----
+This project demonstrates a complete **CI/CD pipeline implementation** to automate the build, delivery, and deployment of a containerized application using:
 
-## 📌 Project Overview
-The Digital Health Record Management System (DHRMS) for Migrant Workers is a web-based application designed to store and manage migrant workers’ health records digitally with secure, role-based access.
-
-This project is built using a 3-tier architecture with a multi-service backend, orchestrated using Docker Compose on a Linux environment, following DevOps best practices.
-
-The system enables location-independent access to health records, ensuring continuity of medical information for migrant workers as they move between regions.
+- **Jenkins** (CI/CD Automation)  
+- **Docker** (Containerization)  
+- **Kubernetes (Minikube)** (Orchestration & Deployment)  
 
 ---
 
-## 🎯 Project Goals
-- Build a modular multi-service application
-- Use Linux as the primary operating system
-- Containerize application services using Docker
-- Orchestrate services using Docker Compose
-- Implement role-based access control
-- Apply DevOps practices for deployment and configuration
+## Overview
 
-## 🛠️ Tech Stack (DevOps Focused)
+The pipeline enables seamless transition from **code commit to production deployment**, ensuring:
 
-
-### 🖥️ Frontend
-- HTML, CSS, JavaScript  
-
-### ⚙️ Backend
-- Python (Flask / FastAPI)
-- REST APIs
-
-### 🗄️ Database
-- MySQL
-
-### 📦 Containerization
-- Docker
-- Docker Compose (local setup)
-
-### 🔧 Version Control
-- Git & GitHub
+- Faster delivery  
+- Reduced manual effort  
+- Scalable application deployment  
+- Zero-downtime updates using rolling strategy  
 
 ---
 
-## 🐳 Containerization Strategy
+## CI/CD Workflow
 
-- Each service has its own `Dockerfile`
-- Services are deployed as independent containers
-- Environment variables used for configuration
-- Containers run as non-root users
+```
+Developer Commit → GitHub Repository → Jenkins Trigger
+        ↓
+Source Code Checkout
+        ↓
+Docker Image Build
+        ↓
+Docker Image Push (Docker Hub)
+        ↓
+Kubernetes Apply (YAML Files)
+        ↓
+Update Deployment Image
+        ↓
+Rolling Update
+        ↓
+Application Running in Kubernetes
+```
 
 ---
 
-## 🚀 Deployment Flow
-- Source code is pushed to GitHub
-- Each service contains its own Dockerfile
-- Docker images are built locally
-- Docker Compose orchestrates and starts all services
-- Services communicate with each other over a private Docker network
-- Frontend accesses backend services through exposed ports
+## Pipeline Stages
+
+### 1. Source Code Management
+- Code stored in GitHub repository  
+- Includes:
+  - Application code  
+  - Dockerfile  
+  - Kubernetes manifests  
+  - Jenkinsfile  
 
 ---
 
-## ▶️ Local Development
+### 2. Jenkins Trigger
+Pipeline starts automatically when:
+- Code is pushed to GitHub (Webhook / Poll SCM)
+
+---
+
+### 3. Code Checkout
 
 ```bash
-git clone https://github.com/prathap-32/docker-based-monolithic-application.git
-cd docker-based-monolithic-application
-docker-compose up --build
+git clone <repository-url>
+```
+
+---
+
+### 4. Docker Build Stage
+
+```bash
+docker build -t <dockerhub-username>/web-app:<build-number> .
+docker tag <dockerhub-username>/web-app:<build-number> <dockerhub-username>/web-app:latest
+```
+
+---
+
+### 5. Docker Push Stage
+
+```bash
+docker push <dockerhub-username>/web-app:<build-number>
+docker push <dockerhub-username>/web-app:latest
+```
+
+---
+
+### 6. Kubernetes Deployment
+
+```bash
+kubectl apply -f k8s/web-app-configmap.yaml
+kubectl apply -f k8s/web-app-service.yaml
+kubectl apply -f k8s/web-app-deployment.yaml
+```
+
+---
+
+### 7. Update Deployment Image
+
+```bash
+kubectl set image deployment/web-app web-app=<dockerhub-username>/web-app:<build-number>
+```
+
+---
+
+### 8. Rolling Update Strategy
+
+- New pods are created gradually  
+- Old pods are terminated step by step  
+- Zero downtime during deployment  
+
+---
+
+### 9. Verification Stage
+
+```bash
+kubectl rollout status deployment/web-app
+kubectl get pods
+kubectl get svc
+```
+
+---
+
+## Kubernetes Architecture
+
+- **Deployment** → Manages application pods  
+- **Service** → Exposes application  
+- **ConfigMap** → Stores configuration  
+- **Secret** → Stores sensitive data  
+
+---
+
+## Tools Used
+
+| Tool | Purpose |
+|------|--------|
+| Jenkins | CI/CD automation |
+| Docker | Containerization |
+| Docker Hub | Image registry |
+| Kubernetes | Container orchestration |
+| GitHub | Version control |
+| Minikube | Local Kubernetes cluster |
+
+---
+
+## Scalability Benefits
+
+- Automated build and deployment  
+- Faster release cycles  
+- Reduced human errors  
+- Supports rolling updates  
+- Easily scalable across environments  
+
+---
+
+## Key Outcome
+
+This pipeline enables:
+
+> 🔹 Automated deployment from GitHub to Kubernetes  
+> 🔹 Continuous integration and continuous delivery  
+> 🔹 Scalable and reliable application deployment  
+
+---
+
+## Future Enhancements
+
+- Add Persistent Volume (PVC) for database  
+- Implement Ingress Controller  
+- Add Monitoring (Prometheus + Grafana)  
+- Add Logging (ELK Stack)  
+- Use Helm Charts for deployment  
+
+---
+
+## Author
+
+**Prathap G**  
+DevOps & Cloud Enthusiast
