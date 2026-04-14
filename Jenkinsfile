@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Clone Source Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/prathap-32/docker-based-monolithic-application.git'
+                git branch: 'main', url: 'https://github.com/prathap-32/cicd-pipeline-healthcare-application.git'
             }
         }
 
