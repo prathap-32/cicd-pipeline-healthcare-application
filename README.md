@@ -37,6 +37,7 @@ Update Deployment Image
 Rolling Update
         ↓
 Application Running in Kubernetes
+
 ```
 
 ---
