@@ -240,11 +240,4 @@ This project is licensed under the MIT License - see LICENSE file for details.
 ## 👨‍💼 Author
 
 **Prathap G**  
-DevOps Engineer & Healthcare Tech Enthusiast  
-Passionate about building accessible healthcare solutions for migrant workers
-
----
-
-## 🙏 Contributing
-
-Contributions are welcome! Please follow our contribution guidelines and submit pull requests to help improve healthcare access for migrant workers worldwide.
+Aspiring DevOps Engineer
